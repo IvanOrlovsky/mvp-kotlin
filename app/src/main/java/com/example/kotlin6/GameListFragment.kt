@@ -7,24 +7,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.kotlin6.databinding.FragmentGameListBinding
 import com.example.kotlin6.data.Game
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.lifecycle.ViewModelProvider
+import com.example.kotlin6.presenter.GameListPresenter
+import com.example.kotlin6.view.GameListView
 
+class GameListFragment : Fragment(), GameListView {
 
-class GameListFragment : Fragment() {
-
-    private lateinit var gameViewModel: GameViewModel
+    private lateinit var binding: FragmentGameListBinding
     private lateinit var gameAdapter: GameAdapter
+    private lateinit var gamePresenter: GameListPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val view = inflater.inflate(R.layout.fragment_game_list, container, false)
-
-        gameViewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
+    ): View? {
+        binding = FragmentGameListBinding.inflate(inflater, container, false)
+        gamePresenter = GameListPresenter(this) // Передаем текущий фрагмент как GameListView
 
         gameAdapter = GameAdapter(
             mutableListOf(),
@@ -32,24 +31,28 @@ class GameListFragment : Fragment() {
                 val action = GameListFragmentDirections.actionGameListFragmentToGameDetailFragment(game, position)
                 findNavController().navigate(action)
             },
-            { position ->
-                gameViewModel.removeGame(position)
-            }
+            { position -> gamePresenter.removeGame(position) }
         )
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = gameAdapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = gameAdapter
 
-        view.findViewById<FloatingActionButton>(R.id.addButton).setOnClickListener {
+        binding.addButton.setOnClickListener {
             val newGame = Game("New Game", "Description", "Genre", 2022)
-            gameViewModel.addGame(newGame)
+            gamePresenter.addGame(newGame)
         }
 
-        gameViewModel.games.observe(viewLifecycleOwner) { games ->
-            gameAdapter.updateGames(games)
-        }
+        gamePresenter.loadGames()
 
-        return view
+        return binding.root
+    }
+
+    // Реализуем метод интерфейса для отображения списка игр
+    override fun showGames(games: List<Game>) {
+        gameAdapter.updateGames(games)
+    }
+
+    override fun showError(message: String) {
+        TODO("Not yet implemented")
     }
 }

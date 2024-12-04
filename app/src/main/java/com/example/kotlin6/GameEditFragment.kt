@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.kotlin6.data.Game
-import androidx.lifecycle.ViewModelProvider
+import com.example.kotlin6.presenter.GameEditPresenter
+import com.example.kotlin6.view.GameEditView
 
+class GameEditFragment : Fragment(), GameEditView {
 
-class GameEditFragment : Fragment() {
-
-    private lateinit var gameViewModel: GameViewModel
+    private lateinit var presenter: GameEditPresenter
     private val args: GameEditFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -24,50 +24,38 @@ class GameEditFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_game_edit, container, false)
 
-        gameViewModel = ViewModelProvider(requireActivity()).get(GameViewModel::class.java)
+        presenter = GameEditPresenter(this)
 
         val titleEditText = view.findViewById<EditText>(R.id.editTitle)
         val descriptionEditText = view.findViewById<EditText>(R.id.editDescription)
         val genreEditText = view.findViewById<EditText>(R.id.editGenre)
         val yearEditText = view.findViewById<EditText>(R.id.editYear)
 
-        val game = args.game
         val position = args.position
-
-        titleEditText.setText(game.title)
-        descriptionEditText.setText(game.description)
-        genreEditText.setText(game.genre)
-        yearEditText.setText(game.year.toString())
+        presenter.loadGameDetails(position)
 
         view.findViewById<Button>(R.id.saveButton).setOnClickListener {
             val title = titleEditText.text.toString().trim()
             val description = descriptionEditText.text.toString().trim()
 
-            if (title.isEmpty()) {
-                titleEditText.error = "Название обязательно"
-                return@setOnClickListener
-            }
-
-            if (description.isEmpty()) {
-                descriptionEditText.error = "Описание обязательно"
-                return@setOnClickListener
-            }
-
-            val updatedGame = Game(
-                title,
-                description,
-                genreEditText.text.toString().trim(),
-                yearEditText.text.toString().toIntOrNull() ?: 0
-            )
-
-            gameViewModel.updateGame(position, updatedGame)
-
-            findNavController().popBackStack()
+            presenter.saveGameDetails(position, title, description, genreEditText.text.toString().trim(), yearEditText.text.toString().toIntOrNull() ?: 0)
         }
-
 
         return view
     }
+
+    override fun showGameDetails(game: Game) {
+        view?.findViewById<EditText>(R.id.editTitle)?.setText(game.title)
+        view?.findViewById<EditText>(R.id.editDescription)?.setText(game.description)
+        view?.findViewById<EditText>(R.id.editGenre)?.setText(game.genre)
+        view?.findViewById<EditText>(R.id.editYear)?.setText(game.year.toString())
+    }
+
+    override fun showError(message: String) {
+        // Показать ошибку (например, через Toast)
+    }
+
+    override fun navigateBack() {
+        findNavController().popBackStack()
+    }
 }
-
-

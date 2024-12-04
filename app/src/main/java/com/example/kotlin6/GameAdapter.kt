@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin6.data.Game
 
 class GameAdapter(
-    private var games: MutableList<Game>,
+    private var games: List<Game>,
     private val onItemClick: (Game, Int) -> Unit,
     private val onDeleteClick: (Int) -> Unit
 ) : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
@@ -35,44 +35,9 @@ class GameAdapter(
 
     override fun getItemCount(): Int = games.size
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
+    // Метод для обновления данных
     fun updateGames(newGames: List<Game>) {
-        this.games.clear()
-        this.games.addAll(newGames)
+        this.games = newGames
         notifyDataSetChanged()
     }
 }
