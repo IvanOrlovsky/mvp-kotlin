@@ -4,6 +4,6 @@ import com.example.kotlin6.data.Game
 
 interface GameEditView {
     fun showGameDetails(game: Game)
-    fun showError(message: String)
     fun navigateBack()
+    fun returnUpdatedGame(game: Game, position: Int)
 }

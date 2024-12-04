@@ -1,25 +1,19 @@
 package com.example.kotlin6.presenter
 
+import android.content.Context
 import com.example.kotlin6.data.Game
 import com.example.kotlin6.view.GameDetailView
 
-class GameDetailPresenter(private val view: GameDetailView) {
-
-    // Пример данных игры
-    private var currentGame: Game? = null
+class GameDetailPresenter(
+    private val view: GameDetailView, // Интерфейс, который реализует View
+    private val context: Context // Контекст приложения для доступа к SharedPreferences
+) {
 
     fun loadGameDetails(game: Game) {
-        currentGame = game
-        view.showGameDetails(game)  // Отображение данных игры в представлении
+        view.showGameDetails(game)
     }
 
-    fun onEditButtonClicked(position: Int) {
-        currentGame?.let {
-            view.navigateToEditScreen(it, position)  // Переход на экран редактирования
-        } ?: view.showError("Game details not available")  // Ошибка, если данных нет
-    }
-
-    fun onError(message: String) {
-        view.showError(message)  // Отображение ошибки
+    fun onEditGameClicked(game: Game, position: Int) {
+        view.navigateToEditScreen(game, position)
     }
 }
