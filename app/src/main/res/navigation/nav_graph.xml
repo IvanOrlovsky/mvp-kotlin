@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/gameListFragment">
+
+    <fragment
+        android:id="@+id/gameListFragment"
+        android:name="com.example.kotlin6.GameListFragment"
+        android:label="Game List">
+        <action
+            android:id="@+id/action_gameListFragment_to_gameDetailFragment"
+            app:destination="@id/gameDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameDetailFragment"
+        android:name="com.example.kotlin6.GameDetailFragment"
+        android:label="Game Detail">
+        <argument
+            android:name="game"
+            app:argType="com.example.kotlin6.data.Game" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_gameDetailFragment_to_gameEditFragment"
+            app:destination="@id/gameEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameEditFragment"
+        android:name="com.example.kotlin6.GameEditFragment"
+        android:label="Game Edit">
+        <argument
+            android:name="game"
+            app:argType="com.example.kotlin6.data.Game" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_gameEditFragment_to_gameListFragment"
+            app:destination="@id/gameListFragment" />
+    </fragment>
+</navigation>
