@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.kotlin6.data.Game
 import com.example.kotlin6.databinding.FragmentGameEditBinding
 import com.example.kotlin6.presenter.GameEditPresenter
 import com.example.kotlin6.view.GameEditView
+import com.example.kotlin6.model.Game
 
 class GameEditFragment : Fragment(), GameEditView {
 
@@ -26,10 +26,10 @@ class GameEditFragment : Fragment(), GameEditView {
         binding = FragmentGameEditBinding.inflate(inflater, container, false)
 
         // Инициализация презентера
-        presenter = GameEditPresenter(this, requireContext())
+        presenter = GameEditPresenter(this, requireContext(), args.position)
 
-        // Загружаем текущие данные игры по переданной позиции
-        presenter.loadGameDetails(args.position)
+        // Загружаем текущие данные игры
+        presenter.loadGameDetails()
 
         // Слушатель на кнопку сохранения
         binding.saveButton.setOnClickListener {
@@ -39,7 +39,7 @@ class GameEditFragment : Fragment(), GameEditView {
             val year = binding.editYear.text.toString().toIntOrNull() ?: 0
 
             // Сохраняем обновленные данные игры
-            presenter.saveGameDetails(args.position, title, description, genre, year)
+            presenter.saveGameDetails(title, description, genre, year)
         }
 
         return binding.root

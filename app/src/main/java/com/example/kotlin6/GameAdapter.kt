@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kotlin6.data.Game
+import com.example.kotlin6.model.Game
 
 // Адаптер для отображения списка игр в RecyclerView
 class GameAdapter(

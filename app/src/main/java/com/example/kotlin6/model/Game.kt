@@ -1,4 +1,4 @@
-package com.example.kotlin6.data
+package com.example.kotlin6.model
 
 import java.io.Serializable
 

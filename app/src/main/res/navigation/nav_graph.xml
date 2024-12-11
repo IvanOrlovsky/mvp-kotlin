@@ -18,7 +18,7 @@
         android:label="Game Detail">
         <argument
             android:name="game"
-            app:argType="com.example.kotlin6.data.Game" />
+            app:argType="com.example.kotlin6.model.Game" />
         <argument
             android:name="position"
             app:argType="integer" />
@@ -33,7 +33,7 @@
         android:label="Game Edit">
         <argument
             android:name="game"
-            app:argType="com.example.kotlin6.data.Game" />
+            app:argType="com.example.kotlin6.model.Game" />
         <argument
             android:name="position"
             app:argType="integer" />

@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.kotlin6.data.Game
 import com.example.kotlin6.databinding.FragmentGameDetailBinding
 import com.example.kotlin6.presenter.GameDetailPresenter
 import com.example.kotlin6.view.GameDetailView
+import com.example.kotlin6.model.Game
 
 class GameDetailFragment : Fragment(), GameDetailView {
 
@@ -22,14 +22,14 @@ class GameDetailFragment : Fragment(), GameDetailView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentGameDetailBinding.inflate(inflater, container, false)
 
         // Инициализация презентера
-        gameDetailPresenter = GameDetailPresenter(this, requireContext())
+        gameDetailPresenter = GameDetailPresenter(this, requireContext(), args.position)
 
-        // Отображение первоначальных данных игры
-        showGameDetails(args.game)
+        // Загрузка данных игры
+        gameDetailPresenter.loadGameDetails()
 
         // Логика обновления данных при возвращении из редактирования
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Game>("updatedGame")
@@ -39,11 +39,7 @@ class GameDetailFragment : Fragment(), GameDetailView {
 
         // Навигация на экран редактирования игры
         binding.editButton.setOnClickListener {
-            val action = GameDetailFragmentDirections.actionGameDetailFragmentToGameEditFragment(
-                args.game,
-                args.position
-            )
-            findNavController().navigate(action)
+            gameDetailPresenter.onEditGameClicked()
         }
 
         return binding.root
